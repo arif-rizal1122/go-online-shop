@@ -30,6 +30,7 @@ func Run() {
 	appConfig.AppName = getEnv("APP_NAME", "go-online-shop")
 	appConfig.AppEnv = getEnv("APP_ENV", "development")
 	appConfig.AppPort = getEnv("APP_PORT", "9000")
+	appConfig.AppURL = getEnv("APP_URL", "http://localhost:9000")
 
 	dbConfig.DBHost = getEnv("DB_HOST", "localhost")
 	dbConfig.DBUser = getEnv("DB_USER", "postgres")
@@ -37,6 +38,7 @@ func Run() {
 	dbConfig.DBName = getEnv("DB_NAME", "goToko")
 	dbConfig.DBPort = getEnv("DB_PORT", "5432")
 	dbConfig.DBDriver = getEnv("DB_DRIVER", "postgres")
+	
 
 	// Parse argumen dari baris perintah
 	flag.Parse()
