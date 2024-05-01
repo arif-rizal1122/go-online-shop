@@ -10,14 +10,14 @@ import (
 
  
 func Home(w http.ResponseWriter, r *http.Request) {
-   render := render.New(render.Options{
-	 Layout: "layout",
-   })
+  render := render.New(render.Options{
+	Layout: "layout",
+  })
 
-   _ = render.HTML(w, http.StatusOK, "home", map[string]interface{} {
-	    "title": "home title",
-		"body" : "home description",
-   })
-
+  _ = render.HTML(w, http.StatusOK, "home", map[string]interface{} {
+	    "title": "Home title",
+		"body": "Home Description",
+  })
 
 }
+
