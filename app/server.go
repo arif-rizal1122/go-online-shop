@@ -6,10 +6,11 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/arif-rizal1122/go-online-shop/database/seeders"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -59,6 +60,7 @@ func (server *Server) Initialize(appConfig *AppConfig, dbConfig *DBConfig) {
 	server.initializeDB(*dbConfig)
 	// server.Router = mux.NewRouter()
 	server.InitializeRoutes()
+	seeders.DBSeed(server.DB)
 }
 
 
@@ -84,8 +86,7 @@ func (server *Server) initializeDB(dbConfig DBConfig)  {
 				panic("failed on connection database server postgreSQL")
 			}
 		}
-
-
+		
 		// looping migrate from interface model.registermodels
 		for _, model := range RegisterModels(){
 			err := server.DB.Debug().AutoMigrate(model.Model)
@@ -94,7 +95,6 @@ func (server *Server) initializeDB(dbConfig DBConfig)  {
 			}
 		}
 		fmt.Println("database migration succesfully")
-
 }
 
 

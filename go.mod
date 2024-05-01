@@ -19,11 +19,15 @@ require (
 	github.com/unrolled/render v1.6.1 // indirect // ini untuk render template html nya nanti
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 )
 
 require (
+	github.com/bxcodec/faker/v4 v4.0.0-beta.3 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
+	github.com/gosimple/slug v1.14.0 // indirect
+	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/tools v0.20.0 // indirect
