@@ -1,6 +1,7 @@
 package app
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/arif-rizal1122/go-online-shop/database/seeders"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/urfave/cli"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -43,31 +45,13 @@ type DBConfig struct {
 }
 
 
-
-// nilai default env
-func getEnv(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
-}
-
-
-
-
 func (server *Server) Initialize(appConfig *AppConfig, dbConfig *DBConfig) {
 	fmt.Println("welcome to go online shop " + appConfig.AppName)
-	server.initializeDB(*dbConfig)
-	// server.Router = mux.NewRouter()
 	server.InitializeRoutes()
-	seeders.DBSeed(server.DB)
 }
-
-
 
 
 func (server *Server) initializeDB(dbConfig DBConfig)  {
-	
 		var err error
 
 		if (dbConfig.DBDriver == "mysql") {
@@ -87,16 +71,7 @@ func (server *Server) initializeDB(dbConfig DBConfig)  {
 			}
 		}
 		
-		// looping migrate from interface model.registermodels
-		for _, model := range RegisterModels(){
-			err := server.DB.Debug().AutoMigrate(model.Model)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
-		fmt.Println("database migration succesfully")
 }
-
 
 
 
@@ -104,8 +79,6 @@ func (server *Server) Run(addr string) {
 	fmt.Println("listening to on port",  addr)
 	log.Fatal(http.ListenAndServe(addr, server.Router))
 }
-
-
 
 
 
@@ -130,9 +103,65 @@ func Run()  {
 	dbConfig.DBPort = getEnv("DB_PORT", "5432")
 	dbConfig.DBDriver = getEnv("DB_DRIVER", "postgres")
 
-	server.Initialize(&appConfig, &dbConfig)
-	server.Run(":" + appConfig.AppPort)
 
+	flag.Parse()
+	arg := flag.Arg(0)
+	if arg != "" {
+		server.initCommands(dbConfig)
+	} else {
+		server.Initialize(&appConfig, &dbConfig)
+		server.Run(":" + appConfig.AppPort)
+	}
 }
 
 
+// nilai default env
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
+
+func (server *Server) dbMigrate() {
+	// looping migrate from interface model.registermodels
+	for _, model := range RegisterModels(){
+	  err := server.DB.Debug().AutoMigrate(model.Model)
+		if err != nil {
+			log.Fatal(err)
+			}
+	}
+	fmt.Println("database migration succesfully")
+}
+
+
+func (server *Server )initCommands(dbconfig DBConfig)  {
+	// seeders.DBSeed(server.DB)
+	server.initializeDB(dbconfig)
+
+	cmdApp := cli.NewApp()
+	cmdApp.Commands = []cli.Command{
+		{
+			Name: "db:migrate",
+			Action: func (c *cli.Context) error {
+				server.dbMigrate()
+				return nil
+			},
+		},
+		{
+			Name: "db:seed",
+			Action: func (c *cli.Context) error {
+				err := seeders.DBSeed(server.DB)
+				if err != nil {
+					log.Fatal(err)
+				}
+				return nil
+			},
+		},
+	}
+	err := cmdApp.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
