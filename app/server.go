@@ -47,7 +47,7 @@ type DBConfig struct {
 
 func (server *Server) Initialize(appConfig *AppConfig, dbConfig *DBConfig) {
 	fmt.Println("welcome to go online shop " + appConfig.AppName)
-	server.InitializeRoutes()
+	server.initializeRoutes()
 }
 
 
