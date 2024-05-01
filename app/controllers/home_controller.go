@@ -9,7 +9,7 @@ import (
 
 
  
-func Home(w http.ResponseWriter, r *http.Request) {
+func (server *Server) Home(w http.ResponseWriter, r *http.Request) {
   render := render.New(render.Options{
 	Layout: "layout",
   })
