@@ -11,6 +11,8 @@ func (server *Server) initializeRoutes() {
 
 	server.Router.HandleFunc("/", server.Home).Methods("GET")
 	server.Router.HandleFunc("/products", server.Products).Methods("GET")
+	server.Router.HandleFunc("/products/{slug}", server.GetProductBySlug).Methods("GET")
+
 
 
 	staticFileDirectory := http.Dir("./assets/")
