@@ -10,6 +10,7 @@ import (
 	"github.com/arif-rizal1122/go-online-shop/app/models"
 	"github.com/arif-rizal1122/go-online-shop/database/seeders"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"github.com/urfave/cli"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -66,6 +67,11 @@ type PaginationParams struct {
 	CurrentPage     int32
 }
 
+
+
+
+var store = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
+var sessionShoppingCart = "shopping-cart-sessions"
 
 
 
