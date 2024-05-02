@@ -19,6 +19,7 @@ func RegisterSeeder(db *gorm.DB) []Seeder {
    return []Seeder{
        {Seeder: fakers.UserFaker(db)},
 	   {Seeder: fakers.ProductFaker(db)},
+	   {Seeder: fakers.ProductImageFakers(db)},
    }
 
 }
@@ -32,6 +33,7 @@ func DBSeed(db *gorm.DB) error {
 			return err
 		}
 	}
+
 	fmt.Println("db seeder successfully")
 	return nil
 }
